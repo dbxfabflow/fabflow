@@ -1,6 +1,6 @@
-# CraftOS — selling CRM, Offer, Nesting & DB as subscriptions
+# CraftOS — selling CRM, Offer, Invoices, Nesting & DB as subscriptions
 
-This repo contains everything to charge for the four apps with **Stripe**, gate
+This repo contains everything to charge for the five apps with **Stripe**, gate
 access per **workspace** (= one customer company), and onboard customers through
 the **fabsuite** storefront.
 
@@ -19,7 +19,7 @@ the **fabsuite** storefront.
                            │  create-checkout-session ────────► Checkout (14-day trial)
   success.html ◄───────────┘                                   │
                                                                 ▼
-  DB app / NESTING app                  stripe-webhook ◄──── subscription events
+  DB (ShopFlow) / NESTING / INVOICES     stripe-webhook ◄──── subscription events
   ─────────────────────                 (updates fab_orgs.status + apps)
   enterApp() → FabsuiteLicense.gate()
         │  org_entitlement(code)  ─────► reads fab_orgs
@@ -41,6 +41,7 @@ a Stripe subscription and the list of unlocked apps. The apps ask
 | `supabase/migrations/0003_apps_catalog.sql` | adds CRM + Offer to the catalog; back-fills suite/comp workspaces |
 | `supabase/migrations/0004_project_tenancy.sql` | `fabflow_projects` gains `workspace_code` (was globally keyed on name) |
 | `supabase/migrations/0005_tenant_isolation.sql` | **RLS on every app table**, keyed to `org_members` — read the header first |
+| `supabase/migrations/0006_invoices_app.sql` | adds Invoices to the catalog; back-fills suite/comp workspaces |
 | `supabase/functions/create-checkout-session` | Start Stripe Checkout for a plan |
 | `supabase/functions/create-portal-session` | Open Stripe Billing Portal |
 | `supabase/functions/stripe-webhook` | Sync subscription → `fab_orgs` (source of truth) |
@@ -49,6 +50,8 @@ a Stripe subscription and the list of unlocked apps. The apps ask
 | `fabsuite/` | Landing, pricing, signup, account, success/canceled, terms, privacy |
 | `crm/` | The CRM app (source; built to `fabflow-crm`) |
 | `offer-patch/` | Wrapper that turns `~/github/offer` into the CraftOS Offer app |
+| `invoices-patch/` | Wrapper that turns `~/github/invoices` into the CraftOS Invoices app |
+| `shopflow-patch/` | Wrapper that turns `~/shopflow` into the CraftOS **DB** app |
 | `scripts/stripe-seed.mjs` | Create the products & prices in Stripe |
 | `index.html` | DB app — gate wired into `enterApp()`, billing link in sidebar |
 
@@ -96,7 +99,7 @@ supabase functions deploy stripe-webhook --no-verify-jwt   # Stripe can't send a
 supabase secrets set \
   STRIPE_SECRET_KEY=sk_test_xxx \
   FABSUITE_URL=https://dbxfabflow.github.io/fabflow/fabsuite \
-  FABSUITE_APPS=crm,offer,nesting,db \
+  FABSUITE_APPS=crm,offer,invoices,nesting,db \
   FABSUITE_TRIAL_DAYS=60 \
   PRICE_CRM_MONTH=price_...     PRICE_CRM_YEAR=price_... \
   PRICE_OFFER_MONTH=price_...   PRICE_OFFER_YEAR=price_... \

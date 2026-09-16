@@ -31,13 +31,13 @@
     supabaseUrl: "",
     anonKey: "",
     fabsuiteUrl: "https://fabsuite.app",
-    app: "db",                       // 'nesting' | 'db' | 'crm' | 'offer'
+    app: "db",                       // 'nesting' | 'db' | 'crm' | 'offer' | 'invoices'
     brand: "CraftOS",
     supportEmail: "",                // shown at the foot of the paywall
     lang: "",                        // force a language; otherwise auto-detected
   };
 
-  var APP_LABEL = { nesting: "Nesting", db: "DB", crm: "CRM", offer: "Offer" };
+  var APP_LABEL = { nesting: "Nesting", db: "DB", crm: "CRM", offer: "Offer", invoices: "Invoices" };
 
   // ── Paywall copy, in the four languages the suite ships ───────────────────
   var T = {

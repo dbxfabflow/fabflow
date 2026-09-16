@@ -14,6 +14,7 @@ window.FABSUITE = {
     nesting: "https://dbxfabflow.github.io/fabflow-nesting/",
     crm: "https://dbxfabflow.github.io/fabflow-crm/",
     offer: "https://dbxfabflow.github.io/fabflow-offer/",
+    invoices: "https://dbxfabflow.github.io/fabflow-invoices/",
   },
 
   BRAND: "CraftOS",
@@ -69,6 +70,18 @@ window.FABSUITE = {
       ],
       missing: ["Klientų eiga (CRM)", "Gamybos valdymas (DB)"],
     },
+    invoices: {
+      name: "Invoices",
+      tagline: "Sąskaitos faktūros, važtaraščiai ir apmokėjimų sekimas.",
+      month: 19, year: 190, apps: ["invoices"],
+      features: [
+        "PVM ir paprastos sąskaitos faktūros",
+        "Važtaraščiai su maršrutu ir vairuotojais",
+        "Apmokėjimai, skolos ir vėluojantys mokėjimai",
+        "PDF, CSV ir e. sąskaitos XML eksportas",
+      ],
+      missing: ["Pasiūlymų skaičiuoklė (Offer)", "Gamybos valdymas (DB)"],
+    },
     nesting: {
       name: "Nesting",
       tagline: "Pjovimo planų optimizacija ir likučių sandėlis.",
@@ -83,22 +96,22 @@ window.FABSUITE = {
     },
     db: {
       name: "DB",
-      tagline: "Visa gamybos eiga: projektai, žingsniai, komanda.",
+      tagline: "Visas cechas: maršrutai, postai, vienetai, komanda.",
       month: 49, year: 490, apps: ["db"],
       features: [
-        "Cecho rodinys ir gamybos žingsniai",
-        "Projektai, užsakymai, terminai",
-        "Komanda, PIN prisijungimai, vaidmenys",
-        "Sandėlis ir medžiagų poreikis",
+        "Postų lenta su gyvais laikmačiais",
+        "Lygiagretūs maršrutai ir vienetų sekimas",
+        "Sąrašas, lenta, Gantas, kalendorius, apkrova",
+        "Skenavimo postas, sandėlis, PIN prisijungimai",
       ],
       missing: ["Pjovimo optimizacija (Nesting)"],
     },
     suite: {
       name: "CraftOS",
-      tagline: "Viskas viename — visos keturios programos su nuolaida.",
-      month: 89, year: 890, apps: ["crm", "offer", "nesting", "db"], featured: true,
+      tagline: "Viskas viename — visos penkios programos su nuolaida.",
+      month: 89, year: 890, apps: ["crm", "offer", "invoices", "nesting", "db"], featured: true,
       features: [
-        "Viskas iš CRM, Offer, Nesting ir DB",
+        "Viskas iš CRM, Offer, Invoices, Nesting ir DB",
         "Klientas → pasiūlymas → projektas → pjovimas",
         "Bendras sandėlis visose programose",
         "Prioritetinė pagalba",

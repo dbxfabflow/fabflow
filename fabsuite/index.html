@@ -20,6 +20,7 @@ var ICONS = {
   crm:      '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
   offer:    '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/>',
   nesting:  '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 11h18M11 3v8M15 11v10"/>',
+  invoices: '<path d="M5 3h14v18l-2.4-1.5L14.2 21l-2.2-1.5L9.8 21l-2.4-1.5L5 21z"/><path d="M8.5 8.5h7M8.5 12h7M8.5 15.5h4"/>',
   db:       '<path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/><path d="M3 12h18"/>',
   login:    '<rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.3"/>',
   warehouse:'<path d="M3 21V9l9-5 9 5v12"/><rect x="8" y="13" width="8" height="8"/><path d="M8 17h8"/>',
@@ -96,7 +97,7 @@ function paintIcons(){
       <h2 data-i18n="features.h2">Four tools. One workspace.</h2>
       <p data-i18n="features.sub">Same logins, same clients, same warehouse — across all four apps.</p>
     </div>
-    <div class="grid grid-4 apps">
+    <div class="apps">
       <div class="card app-card">
         <div class="ico" data-ico="crm"></div>
         <h3 data-i18n="features.crm.h3">CRM — clients &amp; enquiries</h3>
@@ -116,6 +117,11 @@ function paintIcons(){
         <div class="ico" data-ico="db"></div>
         <h3 data-i18n="features.db.h3">DB — production management</h3>
         <p data-i18n="features.db.p">Shop-floor view, production steps, projects and orders, team roles.</p>
+      </div>
+      <div class="card app-card">
+        <div class="ico" data-ico="invoices"></div>
+        <h3 data-i18n="features.invoices.h3">Invoices — billing &amp; waybills</h3>
+        <p data-i18n="features.invoices.p">VAT invoices, consignment notes and who still owes you money.</p>
       </div>
     </div>
     <div class="grid grid-3" style="margin-top:18px">
@@ -160,6 +166,13 @@ function paintIcons(){
         <span class="fc-app">Nesting</span>
         <span class="fc-t" data-i18n="flow.s4.t">Cut it</span>
         <span class="fc-p" data-i18n="flow.s4.p">Parts go straight to the saw, offcuts back to the shared warehouse.</span>
+      </li>
+      <li class="fc-arrow" aria-hidden="true"></li>
+      <li class="fc-step">
+        <span class="fc-ico" data-ico="invoices" data-ico-size="20"></span>
+        <span class="fc-app">Invoices</span>
+        <span class="fc-t" data-i18n="flow.s5.t">Bill it</span>
+        <span class="fc-p" data-i18n="flow.s5.p">The delivered job becomes a VAT invoice and a waybill — and then a payment you can chase.</span>
       </li>
     </ol>
     <p class="center note" style="margin-top:26px" data-i18n="flow.foot">Use one app on its own, or the whole chain. The hand-offs only appear once you have both ends.</p>
@@ -295,6 +308,47 @@ function paintIcons(){
         </div>
       </div>
     </div>
+
+    <!-- 6) INVOICE -->
+    <div class="shot-row rev">
+      <div class="shot-txt">
+        <span class="tag" data-i18n="demo.invoices.tag">Invoices · Billing</span>
+        <h3 data-i18n="demo.invoices.h3">The job ends with an invoice, not a spreadsheet</h3>
+        <p data-i18n="demo.invoices.p">Your numbering, your bank details and the VAT broken down by rate — everything the law asks for, on one document.</p>
+        <ul>
+          <li data-i18n="demo.invoices.b1">VAT invoices, proformas and credit notes</li>
+          <li data-i18n="demo.invoices.b2">Consignment notes with route, vehicle and driver</li>
+          <li data-i18n="demo.invoices.b3">PDF, CSV and an EN&nbsp;16931 e-invoice XML</li>
+        </ul>
+      </div>
+      <div class="demo-frame">
+        <div class="bar"><i></i><i></i><i></i><span class="bar-title mono">invoices &middot; SF 0142</span></div>
+        <div class="demo-body">
+          <div class="inv-doc">
+            <div class="inv-head">
+              <div>
+                <div class="inv-kind" data-i18n="demo.invoices.kind">VAT invoice</div>
+                <div class="inv-no mono">SF &middot; 0142</div>
+              </div>
+              <div class="inv-party">
+                <span data-i18n="demo.invoices.buyer">Buyer</span>
+                <b>UAB Vilniaus Interjeras</b>
+              </div>
+            </div>
+            <div class="inv-lines" id="inv-lines"></div>
+            <div class="inv-tot">
+              <div class="inv-row"><span data-i18n="demo.invoices.net">Net</span><b id="inv-net">&euro;0</b></div>
+              <div class="inv-row"><span data-i18n="demo.invoices.vat">VAT 21%</span><b id="inv-vat">&euro;0</b></div>
+              <div class="inv-row inv-grand"><span data-i18n="demo.invoices.total">Total</span><b id="inv-total">&euro;0</b></div>
+            </div>
+          </div>
+          <div class="crm-foot">
+            <span class="inv-chip" id="inv-status" data-state="draft" data-i18n="demo.invoices.draft">Draft</span>
+            <button class="btn nest-replay" id="inv-replay" type="button"><span data-i18n="demo.nesting.replay">Replay</span> &#8635;</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -390,8 +444,8 @@ document.getElementById("yr").textContent = new Date().getFullYear();
 
 /* ── pricing ────────────────────────────────────────────────────────────── */
 var INTERVAL = "month";
-// Single-app plans, ordered the way a job flows: enquiry → quote → cutting → build.
-var APP_PLANS = ["crm","offer","nesting","db"];
+// Single-app plans, ordered the way a job flows: enquiry → quote → invoice → cutting → build.
+var APP_PLANS = ["crm","offer","invoices","nesting","db"];
 function planUrl(code){
   var ws = (new RegExp("[?&]ws=([^&#]*)").exec(location.search)||[])[1] || "";
   var u = "signup.html?plan="+code+"&interval="+INTERVAL;
@@ -577,6 +631,7 @@ var COMPARE = { cols:["you","sheets","nesting","erp"], rows:[
   {k:"quotes",    m:["yes","part","part","yes"]},
   {k:"nesting",   m:["yes","no","yes","part"]},
   {k:"floor",     m:["yes","part","no","yes"]},
+  {k:"invoices",  m:["yes","no","no","yes"]},
   {k:"pin",       m:["yes","no","no","part"]},
   {k:"furniture", m:["yes","part","yes","no"]},
   {k:"cloud",     m:["yes","yes","no","part"]},
@@ -622,6 +677,67 @@ function runReport(){
   chart.innerHTML = REP_BARS.map(function(v,i){
     return '<span class="rbar'+(i===REP_BARS.length-1?' hot':'')+'" style="--h:'+v+'%;--d:'+(i*55)+'ms"></span>';
   }).join("");
+}
+
+/* ══ DEMO — INVOICE ═══════════════════════════════════════════════════════
+ * The document the app actually prints: numbered lines with qty · unit · price,
+ * the VAT broken out by rate, and the status the invoice moves through once it
+ * is sent. Lines drop in one by one and the totals count up with them, so the
+ * arithmetic is visible rather than asserted.
+ * ────────────────────────────────────────────────────────────────────────── */
+var INV_LINES = [
+  { k:"l1", q:1, u:"unit", p:4820 },
+  { k:"l2", q:6, u:"unit", p:145  },
+  { k:"l3", q:1, u:"unit", p:280  },
+  { k:"l4", q:2, u:"hour", p:38   }
+];
+var INV_VAT = 0.21;
+var invTimers = [];
+function invMoney(n){
+  return "€" + n.toLocaleString("lt-LT", { minimumFractionDigits:2, maximumFractionDigits:2 })
+                .replace(/[\u00a0\u202f]/g, "\u2009");
+}
+function runInvoice(){
+  var host = document.getElementById("inv-lines"); if(!host) return;
+  var T = window.I18N ? I18N.t : function(k){ return k.split(".").pop(); };
+  invTimers.forEach(clearTimeout); invTimers = [];
+  host.innerHTML = "";
+
+  var chip = document.getElementById("inv-status");
+  if(chip){ chip.setAttribute("data-state","draft"); chip.textContent = T("demo.invoices.draft"); }
+  var net = 0;
+  function paintTotals(){
+    var vat = net * INV_VAT;
+    var el;
+    if((el = document.getElementById("inv-net")))   el.textContent = invMoney(net);
+    if((el = document.getElementById("inv-vat")))   el.textContent = invMoney(vat);
+    if((el = document.getElementById("inv-total"))) el.textContent = invMoney(net + vat);
+  }
+  paintTotals();
+
+  INV_LINES.forEach(function(ln, i){
+    invTimers.push(setTimeout(function(){
+      var sum = ln.q * ln.p;
+      net += sum;
+      var row = document.createElement("div");
+      row.className = "inv-line";
+      row.innerHTML =
+        '<span class="il-n mono">' + (i+1) + '</span>' +
+        '<span class="il-t">' + T("demo.invoices." + ln.k) + '</span>' +
+        '<span class="il-q mono">' + ln.q + " " + T("demo.invoices.u." + ln.u) + '</span>' +
+        '<span class="il-p mono">' + invMoney(sum) + '</span>';
+      host.appendChild(row);
+      paintTotals();
+    }, 260 + i * 380));
+  });
+
+  // …sent, then paid — the two states the money actually passes through.
+  invTimers.push(setTimeout(function(){
+    if(chip){ chip.setAttribute("data-state","sent"); chip.textContent = T("demo.invoices.sent"); }
+  }, 260 + INV_LINES.length * 380 + 420));
+  invTimers.push(setTimeout(function(){
+    if(chip){ chip.setAttribute("data-state","paid"); chip.textContent = T("demo.invoices.paid"); }
+  }, 260 + INV_LINES.length * 380 + 1500));
 }
 
 /* ══ DEMO — CRM PIPELINE ══════════════════════════════════════════════════
@@ -787,14 +903,16 @@ function boot(){
   whenVisible(document.getElementById("nest-svg"), runNesting, false);
   whenVisible(document.getElementById("board"), startBoard, true);
   whenVisible(document.getElementById("rep-chart"), runReport, false);
+  whenVisible(document.getElementById("inv-lines"), runInvoice, false);
 }
 document.addEventListener("i18n:changed", function(){
   // re-render language-dependent widgets
-  renderPlans(); renderBoard(); renderCompare(); runCrm(); runOffer();
+  renderPlans(); renderBoard(); renderCompare(); runCrm(); runOffer(); runInvoice();
 });
 var _rb = document.getElementById("nest-replay"); if(_rb) _rb.addEventListener("click", runNesting);
 var _cb = document.getElementById("crm-replay");  if(_cb) _cb.addEventListener("click", runCrm);
 var _ob = document.getElementById("offer-replay");if(_ob) _ob.addEventListener("click", runOffer);
+var _ib = document.getElementById("inv-replay");  if(_ib) _ib.addEventListener("click", runInvoice);
 if(document.readyState!=="loading") boot(); else document.addEventListener("DOMContentLoaded", boot);
 </script>
 <script src="readiness.js"></script>
